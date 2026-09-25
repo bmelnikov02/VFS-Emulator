@@ -14,11 +14,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(const QString& vfsPath,const QString& startupScriptPath, QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private:
     Ui::MainWindow *ui;
+    QString vfsPath;
+    QString startupScriptPath;
     void handleCommand();
+    void executeCommand(const QString &command);
+    void runStartupScript();
 };
 #endif // MAINWINDOW_H

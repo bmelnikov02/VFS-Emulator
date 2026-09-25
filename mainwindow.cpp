@@ -1,12 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFile>
+#include <QTextStream>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(const QString& vfsPath,const QString& startupScriptPath,QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , vfsPath(vfsPath)
+    , startupScriptPath(startupScriptPath)
 {
     ui->setupUi(this);
     connect(ui->commandInput, &QLineEdit::returnPressed, this, &MainWindow::handleCommand);
+    runStartupScript();
 }
 
 MainWindow::~MainWindow()
@@ -18,6 +23,12 @@ void MainWindow::handleCommand()
 {
     QString command = ui->commandInput->text();
     ui->commandInput->clear();
+    ui->outputText->appendPlainText("> " + command);
+    executeCommand(command);
+}
+
+void MainWindow::executeCommand(const QString &command)
+{
     QStringList parts = command.split(' ', Qt::SkipEmptyParts);
     if (parts.isEmpty())
     {
@@ -39,8 +50,30 @@ void MainWindow::handleCommand()
     {
         this->close();
     }
+    else if (commandName == "conf-dump")
+    {
+        ui->outputText->appendPlainText("vfsPath=" + vfsPath);
+        ui->outputText->appendPlainText("startupScriptPath=" + startupScriptPath);
+    }
     else
     {
         ui->outputText->appendPlainText("Введена неправильная команда: " + commandName);
+    }
+}
+
+void MainWindow::runStartupScript()
+{
+    QFile file(startupScriptPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        ui->outputText->appendPlainText("Не удалось открыть файл");
+        return;
+    }
+    QTextStream stream(&file);
+    while (!stream.atEnd())
+    {
+        QString line = stream.readLine();
+        ui->outputText->appendPlainText("> " + line);
+        executeCommand(line);
     }
 }

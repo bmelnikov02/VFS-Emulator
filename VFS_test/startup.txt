@@ -1,0 +1,5 @@
+ls
+conf-dump
+abc
+cd home
+ls folder1 folder2
