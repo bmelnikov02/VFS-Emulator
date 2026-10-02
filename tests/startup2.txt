@@ -1,3 +1,7 @@
 conf-dump
-cd test
-ls second
+ls
+tree
+uptime
+cd a.txt
+cd no_such_dir
+abc

@@ -1,5 +1,12 @@
-ls
 conf-dump
+ls
+cd level1
+ls
+cd level2
+ls
+cd ..
+ls
+tree
+uptime
+cd no_such_dir
 abc
-cd home
-ls folder1 folder2

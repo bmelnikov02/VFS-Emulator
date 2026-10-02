@@ -4,9 +4,11 @@
 #include <QFileInfoList>
 #include <QDebug>
 
+
 VFS::VFS(const QString& physicalPath)
 {
     rootNode = std::make_unique<VFSnode>("/", NodeType::Directory);
+    currentNode = rootNode.get();
     QDir dir(physicalPath);
     if (!dir.exists())
     {
@@ -34,5 +36,53 @@ void VFS::loadDirectory(const QString& physicalPath, VFSnode* parentNode)
         {
             parentNode->addChild(entry.fileName(), NodeType::File);
         }
+    }
+}
+
+QStringList VFS::listCurrentDirectory() const
+{
+    QStringList result;
+    for (const auto& child : currentNode->getChildren())
+    {
+        result.append(child->getName());
+    }
+    return result;
+}
+
+bool VFS::changeDirectory(const QString& name)
+{
+    if (name == "..")
+    {
+        if (currentNode->getParent() != nullptr)
+        {
+            currentNode = currentNode->getParent();
+            return true;
+        }
+        return false;
+    }
+    for (const auto& child : currentNode->getChildren())
+    {
+        if (child->getName() == name && child->getType() == NodeType::Directory)
+        {
+            currentNode = child.get();
+            return true;
+        }
+    }
+    return false;
+}
+
+QString VFS::tree() const
+{
+    QString result;
+    buildTree(rootNode.get(), 0, result);
+    return result;
+}
+
+void VFS::buildTree(const VFSnode* node, int depth, QString& result) const
+{
+    result += QString(depth * 2,' ') + node->getName() + '\n';
+    for (const auto& child : node->getChildren())
+    {
+        buildTree(child.get(),depth+1,result);
     }
 }

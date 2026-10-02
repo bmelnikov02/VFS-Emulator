@@ -3,6 +3,7 @@
 
 #include "vfs.h"
 #include <QMainWindow>
+#include <QElapsedTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +24,7 @@ private:
     Ui::MainWindow *ui;
     QString vfsPath;
     QString startupScriptPath;
+    QElapsedTimer uptimeTimer;
     void handleCommand();
     void executeCommand(const QString &command);
     void runStartupScript();
