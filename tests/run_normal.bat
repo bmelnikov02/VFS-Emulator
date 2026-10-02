@@ -1,3 +1,3 @@
 @echo off
-"%~dp0..\build\Desktop_Qt_6_11_2_MSVC2022_64bit_Debug\VPS.exe" "%~dp0root" "%~dp0startup.txt"
+"%~dp0..\build\Desktop_Qt_6_11_2_MSVC2022_64bit_Debug\VPS.exe" "%~dp0vfs_minimal" "%~dp0startup.txt"
 pause

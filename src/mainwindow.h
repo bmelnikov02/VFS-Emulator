@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "vfs.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -18,6 +19,7 @@ public:
     ~MainWindow() override;
 
 private:
+    std::unique_ptr<VFS> vfs;
     Ui::MainWindow *ui;
     QString vfsPath;
     QString startupScriptPath;

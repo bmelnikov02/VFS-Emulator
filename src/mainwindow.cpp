@@ -11,6 +11,7 @@ MainWindow::MainWindow(const QString& vfsPath,const QString& startupScriptPath,Q
 {
     ui->setupUi(this);
     connect(ui->commandInput, &QLineEdit::returnPressed, this, &MainWindow::handleCommand);
+    vfs = std::make_unique<VFS>(vfsPath);
     runStartupScript();
 }
 

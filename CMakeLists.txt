@@ -11,6 +11,8 @@ qt_add_executable(VPS
     src/mainwindow.cpp
     src/mainwindow.h
     src/mainwindow.ui
+    src/VFSnode.h src/VFSnode.cpp
+    src/vfs.h src/vfs.cpp
 )
 
 target_link_libraries(VPS
