@@ -5,6 +5,7 @@ VFSnode::VFSnode(const QString& name, NodeType type, VFSnode* parent)
     : name(name)
     , type(type)
     , parent(parent)
+    , permissions(type == NodeType::Directory ? 0755 : 0644)
 {
 }
 
@@ -34,4 +35,14 @@ VFSnode* VFSnode::getParent() const
 const std::vector<std::unique_ptr<VFSnode>>& VFSnode::getChildren() const
 {
     return children;
+}
+
+int VFSnode::getPermissions() const
+{
+    return permissions;
+}
+
+void VFSnode::setPermissions(int permissions)
+{
+    this->permissions = permissions;
 }

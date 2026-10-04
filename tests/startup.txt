@@ -1,12 +1,13 @@
 conf-dump
 ls
-cd level1
-ls
-cd level2
-ls
-cd ..
-ls
 tree
+chmod 700 level1
+chmod 999 level1
+chmod 755 no_such
+cp level1 level1_copy
+tree
+cp no_such copy
+cp level1 level1
+cp level1
 uptime
-cd no_such_dir
 abc

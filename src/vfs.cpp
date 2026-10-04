@@ -86,3 +86,56 @@ void VFS::buildTree(const VFSnode* node, int depth, QString& result) const
         buildTree(child.get(),depth+1,result);
     }
 }
+
+bool VFS::changePermissions(const QString& name, int permissions)
+{
+    for (const auto& entry : currentNode->getChildren())
+    {
+        if (entry->getName() == name){
+            entry->setPermissions(permissions);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VFS::copyNode(const QString& sourceName, const QString& destinationName)
+{
+    VFSnode* sourceNode = nullptr;
+    for (const auto& entry : currentNode->getChildren())
+    {
+        if (entry->getName() == sourceName)
+        {
+            sourceNode = entry.get();
+            break;
+        }
+    }
+    if (sourceNode == nullptr)
+    {
+        return false;
+    }
+    for (const auto& entry : currentNode->getChildren())
+    {
+        if (entry->getName() == destinationName)
+        {
+            return false;
+        }
+    }
+    copySubtree(sourceNode, currentNode, destinationName);
+    return true;
+}
+
+VFSnode* VFS::copySubtree(const VFSnode* source, VFSnode* newParent, const QString& newName)
+{
+    VFSnode* copiedNode = newParent->addChild(newName, source->getType());
+    copiedNode->setPermissions(source->getPermissions());
+    for (const auto& child : source->getChildren())
+    {
+        copySubtree(
+            child.get(),
+            copiedNode,
+            child->getName()
+            );
+    }
+    return copiedNode;
+}

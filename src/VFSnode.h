@@ -17,6 +17,7 @@ class VFSnode
     NodeType type;
     VFSnode* parent;
     std::vector<std::unique_ptr<VFSnode>> children;
+    int permissions;
 
 public:
     VFSnode(const QString& name, NodeType type, VFSnode* parent = nullptr);
@@ -25,6 +26,8 @@ public:
     NodeType getType() const;
     VFSnode* getParent() const;
     const std::vector<std::unique_ptr<VFSnode>>& getChildren() const;
+    int getPermissions() const;
+    void setPermissions(int permissions);
 };
 
 #endif // VFSNODE_H

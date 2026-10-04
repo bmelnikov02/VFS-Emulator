@@ -72,6 +72,45 @@ void MainWindow::executeCommand(const QString &command)
         qint64 seconds = uptimeTimer.elapsed() / 1000;
         ui->outputText->appendPlainText("uptime: " + QString::number(seconds) + "s");
     }
+    else if (commandName == "chmod")
+    {
+        if (parts.size() != 3)
+        {
+            ui->outputText->appendPlainText("Использование: chmod <permissions> <name>");
+            return;
+        }
+        QString permissionsText = parts[1];
+        QString name = parts[2];
+        bool ok;
+        int permissions = permissionsText.toInt(&ok, 8);
+        if (!ok || permissions < 0 || permissions > 0777)
+        {
+            ui->outputText->appendPlainText("Некорректные права");
+            return;
+        }
+        if (!vfs->changePermissions(name, permissions))
+        {
+            ui->outputText->appendPlainText("Объект не найден: " + name);
+            return;
+        }
+        ui->outputText->appendPlainText("Права изменены: " + name + " -> " + permissionsText);
+    }
+    else if (commandName == "cp")
+    {
+        if (parts.size() != 3)
+        {
+            ui->outputText->appendPlainText("Использование: cp <source> <destination>");
+            return;
+        }
+        QString sourceName = parts[1];
+        QString destinationName = parts[2];
+        if (!vfs->copyNode(sourceName,destinationName))
+        {
+            ui->outputText->appendPlainText("Не удалось выполнить копирование");
+            return;
+        }
+        ui->outputText->appendPlainText("Скопировано: " + sourceName + " -> " + destinationName);
+    }
     else
     {
         ui->outputText->appendPlainText("Введена неправильная команда: " + commandName);
