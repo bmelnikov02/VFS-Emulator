@@ -139,3 +139,15 @@ VFSnode* VFS::copySubtree(const VFSnode* source, VFSnode* newParent, const QStri
     }
     return copiedNode;
 }
+
+int VFS::getPermissions(const QString& name) const
+{
+    for (const auto& entry : currentNode->getChildren())
+    {
+        if (entry->getName() == name)
+        {
+            return entry->getPermissions();
+        }
+    }
+    return -1;
+}

@@ -18,6 +18,7 @@ public:
     QString tree() const;
     bool changePermissions(const QString& name, int permissions);
     bool copyNode(const QString& sourceName, const QString& destinationName);
+    int getPermissions(const QString& name) const;
 };
 
 #endif // VFS_H
